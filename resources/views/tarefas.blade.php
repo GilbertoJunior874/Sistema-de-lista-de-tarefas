@@ -30,8 +30,8 @@
             <tbody>
                 @foreach ($tarefas as $tarefa)
                     <tr>
-                        <td>{{ $tarefa['id'] }}</td>
-                        <td>{{ $tarefa['titulo'] }}</td>
+                        <td>{{ $tarefa->id }}</td>
+                        <td>{{ $tarefa->name }}</td>
                         <td>
                             @if ($tarefa['concluida'])
                                 <span class="badge bg-success">Concluída</span>
@@ -41,14 +41,32 @@
                         </td>
                         <td>
                             <!-- Botão de Ativar/Desativar -->
-                            <button class="btn btn-primary toggle-btn" data-id="{{ $tarefa['id'] }}" data-state="off">
-                                Inativo
+                            <button class="btn btn-primary toggle-btn" data-id="{{ $tarefa->id }}" data-state="off">
+                                Concluir
                             </button>
+                        </td>
+                        <td>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+        @if (session('success'))
+            <div class='alert alert-success'>
+                {{ session('success') }}
+            </div>
+        @endif
+        <form action="{{ route('tarefas.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="name">
+                    Nome
+                </label>
+                <input type="text" class="form-control" name="name">
+            </div>
+            <button class="btn btn-primary" type="submit">Criar Tarefa</button>
+        </form>
     </div>
 
     <!-- Scripts -->
@@ -65,7 +83,7 @@
                     this.classList.add('btn-success');
                 } else {
                     this.setAttribute('data-state', 'off');
-                    this.textContent = 'Inativo';
+                    this.textContent = 'concluir';
                     this.classList.remove('btn-success');
                     this.classList.add('btn-primary');
                 }
